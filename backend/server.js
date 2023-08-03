@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors")
 const db = require("./config/connection")
 const userRouter = require("./router/userRouter");
+const inventoryRouter = require("./router/inventoryRouter")
 const errorHandler = require("./middlewares/errorMiddleware");
 const PORT =  8000;  
 
@@ -24,6 +25,7 @@ app.use(errorHandler)
 
 //routes
 app.use("/api",userRouter)
+app.use("/api/inventoryitem",inventoryRouter)
 app.listen(PORT, ()=>{
     console.log(`Server running on ${`http://localhost:${PORT}`}`)
 })

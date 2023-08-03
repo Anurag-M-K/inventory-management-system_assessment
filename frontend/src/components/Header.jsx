@@ -1,0 +1,26 @@
+import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+function Header() {
+  const { userDetails } = useSelector((state) => state.user);
+const navigate = useNavigate()
+
+  const handleLogout = async()=>{
+    console.log("logout")
+    localStorage.removeItem("secrete")
+    navigate("/login")
+  }
+  return (
+    <div className="flex  flex-row w-full justify-between px-10 py-5 border-b-2">
+      <div>
+        <h1 className="text-4xl font-medium ">Welcome, <span className="text-orange-500 ">{userDetails?.user?.username}</span></h1>
+      </div>
+      <div>
+        <button onClick={handleLogout} className="bg-orange-400 text-white p-2 rounded hover:scale-90 transition duration-300">Logout</button>
+      </div>
+    </div>
+  );
+}
+
+export default Header;

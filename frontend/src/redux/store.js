@@ -4,6 +4,8 @@ import {persistReducer} from 'redux-persist';
 import { combineReducers } from "@reduxjs/toolkit";
 import { userSlice } from "./features/userSlice";
 import { loadingSlice } from "./features/loadingSlice";
+import { blurSlice } from "./features/blurSlice";
+import { inventorySlice } from "./features/inventorySlice";
 
 
 
@@ -17,7 +19,9 @@ const persistConfig = {
 
 const reducer = combineReducers({
     user:userSlice.reducer,
-    loading:loadingSlice.reducer
+    loading:loadingSlice.reducer,
+    blur:blurSlice.reducer,
+    inventory:inventorySlice.reducer,
 
 })
 
