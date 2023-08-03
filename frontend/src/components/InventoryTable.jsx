@@ -3,6 +3,10 @@ import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { setInventoryDetails } from '../redux/features/inventorySlice';
 import axios from 'axios';
+import { CiRead } from "react-icons/ci";
+import { BiSolidEdit } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Swal from 'sweetalert2';
 
 function InventoryTable() {
   const { userDetails } = useSelector((state) => state.user);
@@ -12,7 +16,7 @@ function InventoryTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setRecords(inventoryDetails); // Update records when inventoryDetails changes
+    setRecords(inventoryDetails);
   }, [inventoryDetails]);
 
   const config = {
@@ -42,7 +46,39 @@ function InventoryTable() {
     setRecords(newData);
   };
 
-  const column = [
+  const handleDelete = async (row) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this inventory item!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+      });
+
+      if (result.isConfirmed) {
+        const response = await axios.delete(
+          `http://localhost:8000/api/inventoryitem/deleteinventory/${row._id}`,
+          config
+        );
+        const inventory = await axios.get(
+          'http://localhost:8000/api/inventoryitem/getallinventory',
+          config
+        );
+        dispatch(setInventoryDetails(inventory.data.inventoryItems));
+
+        // Show a success message using SweetAlert
+        Swal.fire('Deleted!', 'The inventory item has been deleted.', 'success');
+      }
+    } catch (error) {
+      console.log('Error deleting:', error);
+    }
+  };
+
+  const columns = [
     {
       name: 'Product Name',
       selector: (row) => row.productname,
@@ -62,14 +98,37 @@ function InventoryTable() {
       name: 'Description',
       selector: (row) => row.description,
     },
+    {
+      name: 'Action',
+      cell: (row) => (
+        <div className='flex gap-x-2'>
+          <CiRead className='cursor-pointer' />
+          <BiSolidEdit className='cursor-pointer' />
+          <RiDeleteBin6Line
+            className='cursor-pointer'
+            color='red'
+            onClick={() => handleDelete(row)} // Call the delete function when the button is clicked
+          />
+        </div>
+      ),
+    },
   ];
 
+  const customStyles = {
+    headCells: {
+      style: {
+        background: '#293585',
+        color: 'white',
+      },
+    },
+  };
+
   return (
-    <div className='mt-5'>
-      <div className='text-end'>
+    <div className='mt-5 m-3'>
+      <div className='text-end '>
         <input className='border-2 border-black rounded' onChange={handleFilter} type='text' />
       </div>
-      <DataTable columns={column} data={records} selectableRows fixedHeader pagination />
+      <DataTable columns={columns} data={records} selectableRows fixedHeader customStyles={customStyles} />
     </div>
   );
 }

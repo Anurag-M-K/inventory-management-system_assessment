@@ -42,7 +42,38 @@ const getAllInventory = async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   };
+
+  const deleteInventory = async (req, res) => {
+    try {
+      // Get the id of the inventory item to be deleted from the request parameters
+      const inventoryItemId = req.params.id;
+      console.log("id check ",inventoryItemId)
+  
+      // Find the inventory item by id in the database
+      const inventoryItem = await inventory.findById(inventoryItemId);
+  
+      // If the inventory item is not found, return an error response
+      if (!inventoryItem) {
+        return res.status(404).json({ message: 'Inventory item not found' });
+      }
+  
+      // Delete the inventory item from the database
+      await inventory.deleteOne({ _id: inventoryItemId });
+  
+      // Return a success response
+      res.json({ message: 'Inventory item deleted successfully' });
+    } catch (error) {
+      // If there is an error, return an error response
+      console.error(error);
+      res.status(500).json({ message: 'Failed to delete inventory item' });
+    }
+  };
+  
+  
+
+
 module.exports = {
     addProduct,
-    getAllInventory
+    getAllInventory,
+    deleteInventory
 }

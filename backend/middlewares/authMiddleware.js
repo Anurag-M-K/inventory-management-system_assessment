@@ -5,7 +5,6 @@ const verifyJWT = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1]; // Get the token without the "Bearer " prefix
-    console.log(token)
     try {
       const decoded = await jwt.verify(token, "secrete");
       const userId = decoded.userId;

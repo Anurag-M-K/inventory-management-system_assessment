@@ -21,6 +21,8 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
 
   const { userDetails  } = useSelector(state=>state.user) 
 
+
+ 
   const handleSubmit = async (values) => {
     console.log('values ', values);
     try {
@@ -41,7 +43,11 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
 
       // Make a POST request to the server to submit the form data
       const response = await axios.post(apiUrl, values,config );
-      dispatch(setInventoryDetails(response.data))
+      const inventory = await axios.get(
+        'http://localhost:8000/api/inventoryitem/getallinventory',
+        config
+      );
+      dispatch(setInventoryDetails(inventory.data.inventoryItems));
       dispatch(setBlur(false))
       // Handle the response, for example, show a success message
       console.log('Form submitted successfully:', response.data);
