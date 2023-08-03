@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik , Form }  from 'formik';
-import { TextField } from "./TextField";
+import { TextField } from "../components/TextField";
 import * as Yup from 'yup';
 import toast , {Toaster} from "react-hot-toast";
 import axios from 'axios';
@@ -18,7 +18,7 @@ function SignupForm() {
   const handleSubmit = async (values) => {
     try {
       setLoading(true)
-      const response = await axios.post('http://localhost:5000/api/signup', values); 
+      const response = await axios.post('http://localhost:8000/api/signup', values); 
       setLoading(false)
 
       toast.success("Registered successfully")

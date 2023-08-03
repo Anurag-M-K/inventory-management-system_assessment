@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../redux/features/userSlice";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading ] = useState(false)
-
+  const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post("http://localhost:8000/api/login", {
         email,
         password,
       });
+      dispatch(setUserDetails(response.data))
       setLoading(false)
       // Save the token and user details in local storage or state
       localStorage.setItem("token", response.data.token);

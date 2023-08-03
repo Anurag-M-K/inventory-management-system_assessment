@@ -7,7 +7,7 @@ const db = async () => {
             useUnifiedTopology : true
         };
 
-        await mongoose.connect("mongodb+srv://AnuragM-K:s69BCSIsT8g0fwvn@cluster0.li6oaod.mongodb.net/inventory-management-system?retryWrites=true&w=majority",connectionParams);
+        await mongoose.connect("mongodb+srv://anuragmk10:3T0fukGrQobfjYwI@inventory-management-db.aywgphb.mongodb.net/?retryWrites=true&w=majority",connectionParams);
         console.log("Database connected successfully");
     } catch (error) {
         console.log(error)
