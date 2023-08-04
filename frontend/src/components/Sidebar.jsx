@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // Import useHistory hook
 const Sidebar = ({ children , onAddProductClick  }) => {
 
   const [open, setOpen] = useState(true);
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Add Products", src: "Folder" },
-    { title: "Accounts", src: "User", gap: true },
+    { title: "Costumers", src: "User", gap: true },
     { title: "Schedule ", src: "Calendar" },
     { title: "Search", src: "Search" },
     { title: "Analytics", src: "Chart" },
@@ -15,6 +16,18 @@ const Sidebar = ({ children , onAddProductClick  }) => {
   ];
   
   const { bluring } = useSelector(state => state.blur)
+
+  const navigate = useNavigate(); // Get the history object from React Router
+
+  const handleMenuClick = (title) => {
+    if (title === "Add Products") {
+      onAddProductClick();
+    } else if (title === "Costumers") {
+      navigate("/customers"); // Navigate to '/customers' page when clicking 'Costumers' tab
+    } else if (title === "Dashboard"){
+      navigate("/dashboard")
+    }
+  };
 
   return (
     <div className={`flex  h-screen ${bluring ? "blur-sm" : ""}`}>
@@ -45,21 +58,21 @@ const Sidebar = ({ children , onAddProductClick  }) => {
           </h1>
         </div>
         <ul className="pt-6">
-        {Menus.map((Menu, index) => (
-          <li
-            key={index}
-            className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 ${
-              Menu.gap ? "mt-9" : "mt-2"
-            } ${index === 0 && "bg-light-white"}`}
-            onClick={Menu.title === "Add Products" ? onAddProductClick : undefined}
-          >
-            <img src={`./src/assets/${Menu.src}.png`} alt={Menu.title} />
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              {Menu.title}
-            </span>
-          </li>
-        ))}
-      </ul>
+          {Menus.map((Menu, index) => (
+            <li
+              key={index}
+              className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 ${
+                Menu.gap ? "mt-9" : "mt-2"
+              } ${index === 0 && "bg-light-white"}`}
+              onClick={() => handleMenuClick(Menu.title)} // Call handleMenuClick function on click
+            >
+              <img src={`./src/assets/${Menu.src}.png`} alt={Menu.title} />
+              <span className={`${!open && "hidden"} origin-left duration-200`}>
+                {Menu.title}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
       {children}
     </div>

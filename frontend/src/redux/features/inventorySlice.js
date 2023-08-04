@@ -8,7 +8,6 @@ export const inventorySlice = createSlice({
     },
     reducers:{
         setInventoryDetails: (state,action) => {
-            console.log("sfsdfasdfasdf ",action.payload)
             state.inventoryDetails = action.payload;
         },
     }

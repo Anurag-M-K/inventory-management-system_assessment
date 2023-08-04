@@ -6,6 +6,7 @@ import { userSlice } from "./features/userSlice";
 import { loadingSlice } from "./features/loadingSlice";
 import { blurSlice } from "./features/blurSlice";
 import { inventorySlice } from "./features/inventorySlice";
+import { customerSlice } from "./features/customerSlice";
 
 
 
@@ -22,6 +23,7 @@ const reducer = combineReducers({
     loading:loadingSlice.reducer,
     blur:blurSlice.reducer,
     inventory:inventorySlice.reducer,
+    customer:customerSlice.reducer,
 
 })
 

@@ -7,11 +7,13 @@ import { CiRead } from "react-icons/ci";
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from 'sweetalert2';
+import UpdateInventoryModal from './UpdateInventoryModal';
 
 function InventoryTable() {
   const { userDetails } = useSelector((state) => state.user);
   const { inventoryDetails } = useSelector((state) => state.inventory);
   const [records, setRecords] = useState(inventoryDetails);
+  const [selectedRow, setSelectedRow] = useState(null);
   const userToken = userDetails.token;
   const dispatch = useDispatch();
 
@@ -103,7 +105,10 @@ function InventoryTable() {
       cell: (row) => (
         <div className='flex gap-x-2'>
           <CiRead className='cursor-pointer' />
-          <BiSolidEdit className='cursor-pointer' />
+          <BiSolidEdit
+            className='cursor-pointer'
+            onClick={() => setSelectedRow(row)} // Set the selected row when the edit icon is clicked
+          />
           <RiDeleteBin6Line
             className='cursor-pointer'
             color='red'
@@ -128,7 +133,11 @@ function InventoryTable() {
       <div className='text-end '>
         <input className='border-2 border-black rounded' onChange={handleFilter} type='text' />
       </div>
-      <DataTable columns={columns} data={records} selectableRows fixedHeader customStyles={customStyles} />
+      <DataTable pagination columns={columns} data={records} selectableRows fixedHeader customStyles={customStyles} />
+
+      {selectedRow && (
+        <UpdateInventoryModal row={selectedRow} closeModal={() => setSelectedRow(null)} />
+      )}
     </div>
   );
 }

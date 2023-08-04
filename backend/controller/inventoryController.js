@@ -70,10 +70,39 @@ const getAllInventory = async (req, res) => {
   };
   
   
-
-
+  const updateInventory = async (req, res) => {
+    try {
+      const { productname, quantity, price, description } = req.body;
+      const inventoryItemId = req.params.id;
+  
+      // Check if the inventory item exists
+      const inventoryItem = await inventory.findById(inventoryItemId);
+  
+      if (!inventoryItem) {
+        return res.status(404).json({ message: 'Inventory item not found' });
+      }
+  
+      // Update the inventory item with the new data
+      inventoryItem.productname = productname;
+      inventoryItem.quantity = quantity;
+      inventoryItem.price = price;
+      inventoryItem.description = description;
+  
+      // Save the updated inventory item
+      await inventoryItem.save();
+  
+      // You can send the updated inventory item in the response if needed
+      res.json({ message: 'Inventory item updated successfully', updatedInventoryItem: inventoryItem });
+    } catch (error) {
+      console.log(error)
+      // Handle any errors that occurred during the update process
+      res.status(500).json({ message: 'An error occurred while updating the inventory item', error: error.message });
+    }
+  };
+  
 module.exports = {
     addProduct,
     getAllInventory,
-    deleteInventory
+    deleteInventory,
+    updateInventory
 }

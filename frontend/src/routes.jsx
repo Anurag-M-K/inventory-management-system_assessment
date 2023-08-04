@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import AddProductModal from './components/AddProductModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBlur } from './redux/features/blurSlice';
+import CustomersManagePage from './pages/CustomersManagePage';
 
 
 function routes() {
@@ -43,6 +44,16 @@ function routes() {
               </Layout>
             </Sidebar>
             <AddProductModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} closeModal={closeModal}/>
+            </PrivateRoutes>
+          }
+        />
+            <Route path="/customers" element={
+           <PrivateRoutes>
+           <Sidebar  onAddProductClick={handleAddProductClick}>
+              <Layout>
+                <CustomersManagePage />
+              </Layout>
+            </Sidebar>
             </PrivateRoutes>
           }
         />
