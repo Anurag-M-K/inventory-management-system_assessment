@@ -28,7 +28,6 @@ function InventoryTable() {
   };
 
   useEffect(() => {
-    try {
       (async () => {
         const inventory = await axios.get(
           'http://localhost:8000/api/inventoryitem/getallinventory',
@@ -36,9 +35,7 @@ function InventoryTable() {
         );
         dispatch(setInventoryDetails(inventory.data.inventoryItems));
       })();
-    } catch (error) {
-      console.log(error);
-    }
+    
   }, []);
 
   const handleFilter = (event) => {
@@ -83,22 +80,22 @@ function InventoryTable() {
   const columns = [
     {
       name: 'Product Name',
-      selector: (row) => row.productname,
+      selector: (row) => row?.productname,
       sortable: true,
     },
     {
       name: 'Quantity',
-      selector: (row) => row.quantity,
+      selector: (row) => row?.quantity,
       sortable: true,
     },
     {
       name: 'Price',
-      selector: (row) => row.price,
+      selector: (row) => row?.price,
       sortable: true,
     },
     {
       name: 'Description',
-      selector: (row) => row.description,
+      selector: (row) => row?.description,
     },
     {
       name: 'Action',
@@ -130,10 +127,13 @@ function InventoryTable() {
 
   return (
     <div className='mt-5 m-3'>
-      <div className='text-end '>
+      <div className='text-end m-5'>
         <input className='border-2 border-black rounded' onChange={handleFilter} type='text' />
       </div>
+      <div className=''>
+
       <DataTable pagination columns={columns} data={records} selectableRows fixedHeader customStyles={customStyles} />
+      </div>
 
       {selectedRow && (
         <UpdateInventoryModal row={selectedRow} closeModal={() => setSelectedRow(null)} />

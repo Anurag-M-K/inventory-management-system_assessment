@@ -11,6 +11,7 @@ import AddProductModal from './components/AddProductModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBlur } from './redux/features/blurSlice';
 import CustomersManagePage from './pages/CustomersManagePage';
+import SalesDetailsPage from './pages/SalesDetailsPage';
 
 
 function routes() {
@@ -43,7 +44,7 @@ function routes() {
                 <Dashboard />
               </Layout>
             </Sidebar>
-            <AddProductModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} closeModal={closeModal}/>
+            <AddProductModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
             </PrivateRoutes>
           }
         />
@@ -52,6 +53,16 @@ function routes() {
            <Sidebar  onAddProductClick={handleAddProductClick}>
               <Layout>
                 <CustomersManagePage />
+              </Layout>
+            </Sidebar>
+            </PrivateRoutes>
+          }
+        />
+            <Route path="/sales" element={
+           <PrivateRoutes>
+           <Sidebar  onAddProductClick={handleAddProductClick}>
+              <Layout>
+                <SalesDetailsPage />
               </Layout>
             </Sidebar>
             </PrivateRoutes>

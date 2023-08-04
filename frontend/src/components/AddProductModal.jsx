@@ -8,6 +8,7 @@ import { setInventoryDetails } from '../redux/features/inventorySlice';
 import { setBlur } from '../redux/features/blurSlice';
 
 function AddProductModal({ setIsModalOpen, isModalOpen }) {
+  console.log("ismodal open ",isModalOpen)
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch()
   const validate = Yup.object({
@@ -20,7 +21,6 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
   });
 
   const { userDetails  } = useSelector(state=>state.user) 
-
 
  
   const handleSubmit = async (values) => {
@@ -62,6 +62,7 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
       setLoading(false); // Set loading state back to false if there's an error
     }
   };
+
 
   return (
     <>

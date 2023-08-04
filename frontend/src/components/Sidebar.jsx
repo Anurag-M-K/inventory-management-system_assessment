@@ -1,33 +1,40 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Import useHistory hook
-const Sidebar = ({ children , onAddProductClick  }) => {
+import { useNavigate } from "react-router-dom";
 
+const Sidebar = ({ children, onAddProductClick }) => {
   const [open, setOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState("Dashboard"); // State variable to track active tab
   const Menus = [
     { title: "Dashboard", src: "Chart_fill" },
     { title: "Add Products", src: "Folder" },
     { title: "Costumers", src: "User", gap: true },
-    { title: "Schedule ", src: "Calendar" },
+    { title: "Sales ", src: "Calendar" },
     { title: "Search", src: "Search" },
     { title: "Analytics", src: "Chart" },
     { title: "Files ", src: "Folder", gap: true },
     { title: "Setting", src: "Setting" },
   ];
-  
-  const { bluring } = useSelector(state => state.blur)
 
-  const navigate = useNavigate(); // Get the history object from React Router
+  const { bluring } = useSelector((state) => state.blur);
+
+  const navigate = useNavigate();
 
   const handleMenuClick = (title) => {
+    console.log("Clicked menu item:", title);
+    setActiveTab(title);
     if (title === "Add Products") {
       onAddProductClick();
     } else if (title === "Costumers") {
-      navigate("/customers"); // Navigate to '/customers' page when clicking 'Costumers' tab
-    } else if (title === "Dashboard"){
-      navigate("/dashboard")
+      navigate("/customers");
+    } else if (title === "Dashboard") {
+      navigate("/dashboard");
+    } else if (title === "Sales") {
+      console.log("Navigating to Sales page...");
+      window.href.reload("/sales");
     }
   };
+  
 
   return (
     <div className={`flex  h-screen ${bluring ? "blur-sm" : ""}`}>
@@ -63,11 +70,15 @@ const Sidebar = ({ children , onAddProductClick  }) => {
               key={index}
               className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 ${
                 Menu.gap ? "mt-9" : "mt-2"
-              } ${index === 0 && "bg-light-white"}`}
-              onClick={() => handleMenuClick(Menu.title)} // Call handleMenuClick function on click
+              } ${index === 0 && ""} ${
+                activeTab === Menu.title ? "bg-light-white" : "" // Add this condition to apply the background for the active tab
+              }`}
+              onClick={() => handleMenuClick(Menu.title)}
             >
               <img src={`./src/assets/${Menu.src}.png`} alt={Menu.title} />
-              <span className={`${!open && "hidden"} origin-left duration-200`}>
+              <span
+                className={`${!open && "hidden"} origin-left duration-200`}
+              >
                 {Menu.title}
               </span>
             </li>
@@ -78,4 +89,5 @@ const Sidebar = ({ children , onAddProductClick  }) => {
     </div>
   );
 };
+
 export default Sidebar;

@@ -57,16 +57,16 @@ function CustomersManagePage() {
   const columns = [
     {
       name: 'Customer name',
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
       name: 'Address',
-      selector: (row) => row.address,
+      selector: (row) => row?.address,
     },
     {
       name: 'Mobile',
-      selector: (row) => row.mobile,
+      selector: (row) => row?.mobile,
     },
   ];
 

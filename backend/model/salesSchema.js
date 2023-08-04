@@ -1,12 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const salesSchema = new mongoose.Schema({
-  date: { type: Date, required: true, default: Date.now },
-  quantity: { type: Number, required: true },
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
-  item: { type: mongoose.Schema.Types.ObjectId, ref: 'InventoryItem' },
-  paymentType: { type: String, enum: ['Cash', 'Credit'], default: 'Cash' },
+const saleSchema = new mongoose.Schema({
+  date: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  customername: {
+    type: String,
+    required: true,
+  },
+  cash: {
+    type: Number,
+    required: true,
+  },
+  productname: {
+   type:String, // Replace this with the actual name of your inventory item collection
+    required: true,
+  },
 });
 
-const Sales = mongoose.model('Sales', salesSchema);
-module.exports = Sales;
+const Sale = mongoose.model("Sale", saleSchema);
+
+module.exports = Sale;

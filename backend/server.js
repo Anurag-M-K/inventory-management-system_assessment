@@ -6,7 +6,8 @@ const cors = require("cors")
 const db = require("./config/connection")
 const userRouter = require("./router/userRouter");
 const inventoryRouter = require("./router/inventoryRouter")
-const customerRoute = require("./router/customerRoute")
+const customerRoute = require("./router/customerRoute");
+const salesRouter = require("./router/salesRouter")
 const errorHandler = require("./middlewares/errorMiddleware");
 const PORT =  8000;  
 
@@ -27,7 +28,8 @@ app.use(errorHandler)
 //routes
 app.use("/api",userRouter)
 app.use("/api/inventoryitem",inventoryRouter)
-app.use("/api/customer",customerRoute)
+app.use("/api/customer",customerRoute);
+app.use("/api/sales",salesRouter)
 app.listen(PORT, ()=>{
     console.log(`Server running on ${`http://localhost:${PORT}`}`)
 })

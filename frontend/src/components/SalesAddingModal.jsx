@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,26 +8,31 @@ import { setInventoryDetails } from "../redux/features/inventorySlice";
 import { setBlur } from "../redux/features/blurSlice";
 import { setCustomers } from "../redux/features/customerSlice";
 
-function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
+function SalesAddingModal({ setCustomers, isOpen, onClose }) {
+  const [ items ,setItem ] = useState([])
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const validate = Yup.object({
-    name: Yup.string()
-      .max(100, " name must be 100 characters or less")
-      .required("Customer name is required"),
-    address: Yup.string().required("address must be 150 or less"),
-    mobile: Yup.number().required("Mobile must be 10 digits"),
+    productname: Yup.string()
+      .max(100, "Product name must be 100 characters or less")
+      .required("Product name is required"),
+    date: Yup.date().required("Date must be valid"),
+    quantity: Yup.number().required("Product quantity required"),
+    customername: Yup.string()
+      .max(50, "Customer name must be 50 or less")
+      .required("Please enter customer name"),
+    cash: Yup.number().required("Please enter cash"),
   });
 
   const { userDetails } = useSelector((state) => state.user);
-
-  
+  const { inventoryDetails } = useSelector((state) => state.inventory);
+  // setItem(inventoryDetails)
+  console.log("items ", items);
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
 
-      const apiUrl = "http://localhost:8000/api/customer/addcustomer";
-      const apiUrl2 = "http://localhost:8000/api/customer/getallcustomers";
+      const apiUrl = "http://localhost:8000/api/sales/addsale";
       const userToken = userDetails.token;
 
       const config = {
@@ -37,29 +42,28 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
       };
 
       const response = await axios.post(apiUrl, values, config);
-      const customers = await axios.get(apiUrl2, config);
-      dispatch(setCustomers(customers.data));
-      setCustomers(customers.data);
+
       setLoading(false);
 
       if (response.status === 201) {
         // Show a success toast if the form submission is successful
-        toast.success("Customer added successfully");
-        // Update the inventory details in Redux store
-        dispatch(setInventoryDetails(response.data.customer));
+        toast.success("Sale record added successfully");
+        // Update the inventory details in Redux store (if required)
+        // dispatch(setInventoryDetails(response.data)); // Make sure you have the proper action creator for setInventoryDetails
         // Close the modal after successful form submission
         onClose();
       } else {
         // Show an error toast if there's an issue with the form submission
-        toast.error("Failed to add Customer details. Please try again later.");
+        toast.error("Failed to add sale record. Please try again later.");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to add Customer details. Please try again later.");
+      toast.error("Failed to add sale record. Please try again later.");
       setLoading(false);
     }
   };
 
+ 
   return (
     <>
       {isOpen ? (
@@ -96,14 +100,16 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
               </button>
               <div className="px-6 py-6 lg:px-8">
                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                  Add Customer details
+                  Add Sales details
                 </h3>
 
                 <Formik
                   initialValues={{
-                    name: "",
-                    address: "",
-                    mobile: "",
+                    productname: "",
+                    date: "",
+                    quantity: "",
+                    customername: "",
+                    cash: "",
                   }}
                   validationSchema={validate}
                   onSubmit={handleSubmit}
@@ -114,57 +120,112 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
                         htmlFor="productname"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
+                        Product Name
+                      </label>
+                      <Field
+                        as="select" // Use a dropdown (select) instead of input
+                        id="productname"
+                        name="productname"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        // onChange={handleProductSelection}
+                      >
+                        <option value="" disabled>
+                          Select a product
+                        </option>
+                        {/* Populate options from inventoryDetails */}
+                        {inventoryDetails.map((product) => (
+                          <option
+                            className="text-black"
+                            key={product.id}
+                            value={product.name}
+                          >
+                            {product.productname}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage
+                        name="productname"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="date"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Date
+                      </label>
+                      <Field
+                        type="date"
+                        id="date"
+                        name="date"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="Date"
+                      />
+                      <ErrorMessage
+                        name="date"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="quantity"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Quantity
+                      </label>
+                      <Field
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="Quantity"
+                      />
+                      <ErrorMessage
+                        name="quantity"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="customername"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
                         Customer Name
                       </label>
                       <Field
                         type="text"
-                        id="name"
-                        name="name"
+                        id="customername"
+                        name="customername"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Customer name"
+                        placeholder="Customer Name"
                       />
                       <ErrorMessage
-                        name="name"
+                        name="customername"
                         component="div"
                         className="text-red-500 text-sm mt-1"
                       />
                     </div>
                     <div>
                       <label
-                        htmlFor="Address"
+                        htmlFor="cash"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Address
+                        Cash
                       </label>
                       <Field
-                        type="text"
-                        id="address"
-                        name="address"
+                        type="number"
+                        id="cash"
+                        name="cash"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Address"
+                        placeholder="Cash"
                       />
                       <ErrorMessage
-                        name="address"
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="mobile"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Mobile
-                      </label>
-                      <Field
-                        type="tele"
-                        id="mobile"
-                        name="mobile"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Mobile number"
-                      />
-                      <ErrorMessage
-                        name="mobile"
+                        name="cash"
                         component="div"
                         className="text-red-500 text-sm mt-1"
                       />
@@ -190,4 +251,4 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
   );
 }
 
-export default CustomerAddingModal;
+export default SalesAddingModal;
