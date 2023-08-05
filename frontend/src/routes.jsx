@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBlur } from './redux/features/blurSlice';
 import CustomersManagePage from './pages/CustomersManagePage';
 import SalesDetailsPage from './pages/SalesDetailsPage';
+import CustomerLedger from './pages/CustomerLedger';
 
 
 function routes() {
@@ -63,6 +64,16 @@ function routes() {
            <Sidebar  onAddProductClick={handleAddProductClick}>
               <Layout>
                 <SalesDetailsPage />
+              </Layout>
+            </Sidebar>
+            </PrivateRoutes>
+          }
+        />
+            <Route path="/customer-ledger/:id" element={
+           <PrivateRoutes>
+           <Sidebar  onAddProductClick={handleAddProductClick}>
+              <Layout>
+                <CustomerLedger />
               </Layout>
             </Sidebar>
             </PrivateRoutes>

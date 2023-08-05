@@ -16,6 +16,9 @@ function SalesDetailsPage() {
   const [sales , setSales] = useState([])
   const dispatch = useDispatch();
   const componentRef = useRef();
+  const { salesData } = useSelector(state => state.sales)
+
+  console.log("sales data ",salesData)
 
 
   //printing function of sales report 
@@ -52,7 +55,6 @@ try {
       };
 
       const response = await axios.get(apiUrl, config);
-      console.log("sales response ",response.data)
       dispatch(setSalesData(response.data));
       setSales(response.data);
     } catch (error) {
@@ -119,11 +121,11 @@ try {
       >
         Add Sale
       </button>
-      <SalesAddingModal  isOpen={isSalesModalOpen} onClose={handleCloseModal} />
+      <SalesAddingModal   isOpen={isSalesModalOpen} onClose={handleCloseModal} />
       <div>
         <h1 className='mx-5 font-medium text-3xl mt-4'>Sales Details</h1>
       </div>
-      <div className="text-end m-5 "> 
+      <div className="text-end m-5  "> 
       
       <button className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 ' onClick={generatePDF}>PDF</button>
       <CSVLink filename='Sales Report' data={filteredSales.length > 0 ? filteredSales : sales } className='hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white '>Export data in Excel</CSVLink>
@@ -140,7 +142,7 @@ try {
   persistTableHead // Add this property to persist the table head and include it in the export
   pagination
   columns={columns}
-  data={filteredSales.length > 0 ? filteredSales : sales}
+  data={filteredSales.length > 0 ? filteredSales : salesData}
   selectableRows
   fixedHeader
   customStyles={customStyles}

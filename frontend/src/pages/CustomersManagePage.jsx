@@ -5,6 +5,7 @@ import { setCustomers } from '../redux/features/customerSlice';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import { setBlur } from '../redux/features/blurSlice';
+import { useNavigate } from 'react-router-dom';
 
 function CustomersManagePage() {
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
@@ -13,6 +14,7 @@ function CustomersManagePage() {
   const [customers, setCustomers] = useState(customersDetils);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleOpenModal = () => {
     setIsCustomerModalOpen(true);
@@ -59,7 +61,14 @@ function CustomersManagePage() {
     {
       name: 'Customer name',
       selector: (row) => row?.name,
-      sortable: true,
+      sortable: true,cell: (row) => (
+        <div
+          style={{ cursor: 'pointer', color: 'blue' }}
+          onClick={() => navigate(`/customer-ledger/${row._id}`)}
+        >
+          {row.name}
+        </div>
+      )
     },
     {
       name: 'Address',

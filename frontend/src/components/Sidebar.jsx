@@ -6,14 +6,10 @@ const Sidebar = ({ children, onAddProductClick }) => {
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("Dashboard"); // State variable to track active tab
   const Menus = [
-    { title: "Dashboard", src: "Chart_fill" },
-    { title: "Add Products", src: "Folder" },
-    { title: "Costumers", src: "User", gap: true },
-    { title: "Sales ", src: "Calendar" },
-    { title: "Search", src: "Search" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files ", src: "Folder", gap: true },
-    { title: "Setting", src: "Setting" },
+    { title: "Dashboard", src: "../assets/Chart_fill.png" },
+    { title: "Add Products", src: "../assets/Folder.png" },
+    { title: "Costumers", src: "../assets/User.png", gap: true },
+    { title: "Sales", src: "../assets/Calendar.png" },
   ];
 
   const { bluring } = useSelector((state) => state.blur);
@@ -29,9 +25,9 @@ const Sidebar = ({ children, onAddProductClick }) => {
       navigate("/customers");
     } else if (title === "Dashboard") {
       navigate("/dashboard");
-    } else if (title === "Sales") {
+    } else {
       console.log("Navigating to Sales page...");
-      window.href.reload("/sales");
+      navigate("/sales");
     }
   };
   

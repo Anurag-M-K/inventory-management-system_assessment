@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInventoryDetails } from "../redux/features/inventorySlice";
 import { setBlur } from "../redux/features/blurSlice";
 import { setCustomers } from "../redux/features/customerSlice";
+import { setSalesData } from "../redux/features/salesSlice";
 
-function SalesAddingModal({ setCustomers, isOpen, onClose }) {
+function SalesAddingModal({ isOpen, onClose }) {
   const [ items ,setItem ] = useState([])
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -42,27 +43,50 @@ function SalesAddingModal({ setCustomers, isOpen, onClose }) {
       };
 
       const response = await axios.post(apiUrl, values, config);
-
       setLoading(false);
+      console.log("response ",response)
 
       if (response.status === 201) {
         // Show a success toast if the form submission is successful
         toast.success("Sale record added successfully");
+
         // Update the inventory details in Redux store (if required)
         // dispatch(setInventoryDetails(response.data)); // Make sure you have the proper action creator for setInventoryDetails
         // Close the modal after successful form submission
         onClose();
-      } else {
+      } 
+       else {
         // Show an error toast if there's an issue with the form submission
         toast.error("Failed to add sale record. Please try again later.");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to add sale record. Please try again later.");
+      toast.error(error?.response?.data?.error);
       setLoading(false);
     }
   };
 
+  const fetchSales = async () => {
+    try {
+      const apiUrl = 'http://localhost:8000/api/sales/getallsalesdetails';
+      const userToken = userDetails.token;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      };
+
+      const response = await axios.get(apiUrl, config);
+      dispatch(setSalesData(response.data));
+      setSales(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(()=>{
+    fetchSales()
+  },[])
  
   return (
     <>

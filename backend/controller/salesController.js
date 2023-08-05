@@ -1,11 +1,19 @@
 const sales = require("../model/salesSchema");
 const inventory = require("../model/inventoryItemsSchema");
+const customer = require("../model/costumerSchema");
 
 const addSale = async (req, res) => {
   try {
     const { productname, date, quantity, customername, cash } = req.body;
 
-console.log("req.body ",req.body)
+    // Find the corresponding customer in the database based on the customername
+    const cust = await customer.findOne({ name: customername });
+
+    if (!cust) {
+      // Customer not found in the database
+      return res.status(401).json({ error: "Customer not found, Please add customer first" });
+    }
+
     // Find the corresponding product in the inventory based on the productname
     const productInInventory = await inventory.findOne({ productname });
 
@@ -29,6 +37,7 @@ console.log("req.body ",req.body)
       date,
       quantity,
       customername,
+      customerId: cust._id, // Assign the customerId field with the customer's _id
       cash,
     });
 
@@ -44,18 +53,17 @@ console.log("req.body ",req.body)
   }
 };
 
-const getAllSalesDetails = async (req,res) => {
+const getAllSalesDetails = async (req, res) => {
   try {
-    let allsalesdetails=await sales.find()
-    res.status(201).json(allsalesdetails)
-    
+    let allsalesdetails = await sales.find();
+    res.status(201).json(allsalesdetails);
   } catch (error) {
-    console.log(error)
-    res.status(500).json({error : "Failed to fetch sales details"})
+    console.log(error);
+    res.status(500).json({ error: "Failed to fetch sales details" });
   }
-}
+};
 
 module.exports = {
   addSale,
-  getAllSalesDetails
+  getAllSalesDetails,
 };

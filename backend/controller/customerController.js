@@ -1,4 +1,5 @@
 const Customer = require("../model/costumerSchema");
+const Sale = require("../model/salesSchema");
 
 const addCustomer = async (req, res) => {
   try {
@@ -35,7 +36,41 @@ const getAllCustomers = async (req, res) => {
     res.status(500).json({ message: "Error fetching customers" });
   }
 };
+
+
+const getCustomerLedger = async (req, res) => {
+  try {
+    const customerId = req.params.id;
+
+    // Fetch customer details using the customer ID
+    const customer = await Customer.findById(customerId);
+    if (!customer) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+    // Fetch sales records for the customer using the customer ID
+    const sales = await Sale.find({ customerId });
+
+    // Prepare the customer ledger object with customer details and sales records
+    const customerLedger = {
+      customer: {
+        id: customer._id,
+        name: customer.name,
+        address: customer.address,
+        mobile: customer.mobile,
+      },
+      sales,
+    };
+
+    // Send the customer ledger as the response
+    res.status(200).json(customerLedger);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+    console.log(error);
+  }
+};
 module.exports = {
   addCustomer,
-  getAllCustomers
+  getAllCustomers,
+  getCustomerLedger
 };

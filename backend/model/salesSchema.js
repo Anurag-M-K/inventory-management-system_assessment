@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose; // Import the Schema object
 
 const saleSchema = new mongoose.Schema({
   date: {
@@ -15,12 +16,17 @@ const saleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  customerId: {
+    type: Schema.Types.ObjectId, // Use the Schema.Types.ObjectId for the field
+    ref: "Customer",
+    required: true,
+  },
   cash: {
     type: Number,
     required: true,
   },
   productname: {
-   type:String, // Replace this with the actual name of your inventory item collection
+    type: String, // Replace this with the actual name of your inventory item collection
     required: true,
   },
 });
