@@ -6,6 +6,7 @@ import SalesAddingModal from '../components/SalesAddingModal';
 import { setSalesData } from '../redux/features/salesSlice'
 import { Toaster, toast } from 'react-hot-toast';
 import { useReactToPrint } from "react-to-print";
+import {CSVLink} from 'react-csv';
 
 
 function SalesDetailsPage() {
@@ -103,6 +104,12 @@ try {
       },
     },
   };
+  
+  const generatePDF= useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "SalesReport",
+    onAfterPrint:()=>alert("Report saved in PDF")
+  });
 
   return (
     <div>
@@ -117,20 +124,28 @@ try {
         <h1 className='mx-5 font-medium text-3xl mt-4'>Sales Details</h1>
       </div>
       <div className="text-end m-5 "> 
+      
+      <button className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 ' onClick={generatePDF}>PDF</button>
+      <CSVLink filename='Sales Report' data={filteredSales.length > 0 ? filteredSales : sales } className='hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white '>Export data in Excel</CSVLink>
+
       <button className='bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white' onClick={handlePrint}>Print</button>
 
         <input className="border-2 border-black rounded" onChange={handleFilter} type="text" />
       </div> 
-     <div className="m-5" ref={componentRef}>
-        <DataTable
-          pagination
-          columns={columns}
-          data={filteredSales.length > 0 ? filteredSales : sales}
-          selectableRows
-          fixedHeader
-          customStyles={customStyles}
-          
-        />
+     <div className="m-5 w-auto" ref={componentRef}>
+      <div ref={componentRef} className='w-auto' >
+     <DataTable
+  id="table-to-xls" // Set an id for the table
+  className='table'
+  persistTableHead // Add this property to persist the table head and include it in the export
+  pagination
+  columns={columns}
+  data={filteredSales.length > 0 ? filteredSales : sales}
+  selectableRows
+  fixedHeader
+  customStyles={customStyles}
+  noDataComponent="No data found"
+/></div>
       </div>
       <Toaster/>
     </div>

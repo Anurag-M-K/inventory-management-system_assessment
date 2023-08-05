@@ -13,7 +13,7 @@ const outOfStockIcon = <BsCartX size={40} color="#fff" />;
   return (
     <div className='w-full '>
         <h3 className='text-2xl font-medium m-2'>Inventory Status</h3>
-        <div className='flex flex-wrap'>
+        <div className=' grid lg:grid-cols-4 gap-x-2 md:grid-cols-3 sm:grid-cols-2 grid-cols-1'>
             <InventoryStatusBox
             icon={productIcon}
             title={"Total Products"}

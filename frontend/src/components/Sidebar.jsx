@@ -37,9 +37,9 @@ const Sidebar = ({ children, onAddProductClick }) => {
   
 
   return (
-    <div className={`flex  h-screen ${bluring ? "blur-sm" : ""}`}>
+    <div className={`flex  h-screen ${bluring ? "blur-sm" : "blur-none"}`}>
       <div
-        className={`fixed  ${
+        className={`  ${
           open ? "w-72" : "w-20 "
         } bg-dark-purple   h-screen p-5  pt-8 relative duration-300`}
       >

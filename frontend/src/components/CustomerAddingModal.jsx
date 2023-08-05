@@ -57,8 +57,13 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
       console.error(error);
       toast.error("Failed to add Customer details. Please try again later.");
       setLoading(false);
+      onClose();
     }
   };
+  const handleClose = () => {
+    dispatch(setBlur(false))
+    onClose()
+  }
 
   return (
     <>
@@ -72,7 +77,7 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
           <div className="relative w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <button
-                onClick={() => setIsCustomerModalOpen(false)}
+                onClick={handleClose}
                 type="button"
                 className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="authentication-modal"
@@ -169,13 +174,20 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
                         className="text-red-500 text-sm mt-1"
                       />
                     </div>
+{
+  loading ? <button
+  type="submit"
+  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+>
+  Saving...
+</button> : 
 
                     <button
                       type="submit"
                       className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Save
-                    </button>
+                    </button>}
                   </Form>
                 </Formik>
               </div>
