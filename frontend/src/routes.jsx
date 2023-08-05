@@ -13,6 +13,8 @@ import { setBlur } from './redux/features/blurSlice';
 import CustomersManagePage from './pages/CustomersManagePage';
 import SalesDetailsPage from './pages/SalesDetailsPage';
 import CustomerLedger from './pages/CustomerLedger';
+import ItemsReports from './pages/ItemsReports';
+import EmailExport from './components/EmailExport';
 
 
 function routes() {
@@ -36,6 +38,7 @@ function routes() {
 
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/l" element={<EmailExport />} />
             <Route path="/" element={<Home />} />
             {/* <Route exact  path="/dashboard" element={<PrivateRoutes> <Dashboard /></PrivateRoutes>} /> */}
             <Route path="/dashboard" element={
@@ -74,6 +77,16 @@ function routes() {
            <Sidebar  onAddProductClick={handleAddProductClick}>
               <Layout>
                 <CustomerLedger />
+              </Layout>
+            </Sidebar>
+            </PrivateRoutes>
+          }
+        />
+            <Route path="/itemspage" element={
+           <PrivateRoutes>
+           <Sidebar  onAddProductClick={handleAddProductClick}>
+              <Layout>
+                <ItemsReports />
               </Layout>
             </Sidebar>
             </PrivateRoutes>

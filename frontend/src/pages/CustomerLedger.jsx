@@ -36,9 +36,9 @@ function CustomerLedger() {
   useEffect(() => {
     fetchCustomerLedger();
   }, [filteredCustomerLedger]);
-
+ 
   const columns = [
-    { name: 'Date', selector: (row) => row?.date, sortable: true },
+    { name: 'Date', selector: (row) =>  new Date(row?.date).toLocaleString("en-US"), sortable: true },
     { name: "Product", selector: (row) => row?.productname },
     { name: "Quantity", selector: (row) => row?.quantity },
     { name: "Total Amount", selector: (row) => row?.cash }

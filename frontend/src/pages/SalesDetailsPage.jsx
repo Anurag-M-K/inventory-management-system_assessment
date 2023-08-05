@@ -7,46 +7,48 @@ import { setSalesData } from '../redux/features/salesSlice'
 import { Toaster, toast } from 'react-hot-toast';
 import { useReactToPrint } from "react-to-print";
 import {CSVLink} from 'react-csv';
+import EmailExportModal from '../components/EmailExportModal';
 
 
 function SalesDetailsPage() {
   const { userDetails } = useSelector(state => state.user);
   const [isSalesModalOpen , setIsSalesModalOpen] = useState(false)
+  const [isEmailModalOpen , setIsEmailModalOpen] = useState(false)
   const [filteredSales, setfilteredSales] = useState([]);
   const [sales , setSales] = useState([])
   const dispatch = useDispatch();
   const componentRef = useRef();
   const { salesData } = useSelector(state => state.sales)
 
-  console.log("sales data ",salesData)
-
-
+  
   //printing function of sales report 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   })
 
+  const handleOpenEmailModal = () => {
+    setIsEmailModalOpen(true)
+  }
+  const handleCloseEmailModal = () => {
+    setIsEmailModalOpen(false)
+  }
+  
   const handleOpenModal = () => {
     setIsSalesModalOpen(true)
   };
-
+  
   const handleCloseModal = () => {
     setIsSalesModalOpen(false)
   };
-
+  
   useEffect(()=>{
-try {
   fetchSales()
-} catch (error) {
-  toast.error("something went wrong")
-}
   },[])
-
 
   const fetchSales = async () => {
     try {
       const apiUrl = 'http://localhost:8000/api/sales/getallsalesdetails';
-      const userToken = userDetails.token;
+      const userToken = userDetails?.token;
 
       const config = {
         headers: {
@@ -126,7 +128,8 @@ try {
         <h1 className='mx-5 font-medium text-3xl mt-4'>Sales Details</h1>
       </div>
       <div className="text-end m-5  "> 
-      
+      <EmailExportModal  isOpen={isEmailModalOpen} onClose={handleCloseEmailModal} />
+      <button onClick={handleOpenEmailModal}  className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 '>Send Email</button>
       <button className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 ' onClick={generatePDF}>PDF</button>
       <CSVLink filename='Sales Report' data={filteredSales.length > 0 ? filteredSales : sales } className='hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white '>Export data in Excel</CSVLink>
 

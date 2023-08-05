@@ -27,8 +27,6 @@ function SalesAddingModal({ isOpen, onClose }) {
 
   const { userDetails } = useSelector((state) => state.user);
   const { inventoryDetails } = useSelector((state) => state.inventory);
-  // setItem(inventoryDetails)
-  console.log("items ", items);
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
@@ -50,9 +48,7 @@ function SalesAddingModal({ isOpen, onClose }) {
         // Show a success toast if the form submission is successful
         toast.success("Sale record added successfully");
 
-        // Update the inventory details in Redux store (if required)
-        // dispatch(setInventoryDetails(response.data)); // Make sure you have the proper action creator for setInventoryDetails
-        // Close the modal after successful form submission
+  
         onClose();
       } 
        else {

@@ -1,6 +1,7 @@
 const sales = require("../model/salesSchema");
 const inventory = require("../model/inventoryItemsSchema");
 const customer = require("../model/costumerSchema");
+const nodemailer = require('nodemailer');
 
 const addSale = async (req, res) => {
   try {
@@ -54,6 +55,7 @@ const addSale = async (req, res) => {
 };
 
 const getAllSalesDetails = async (req, res) => {
+  console.log("sales backend")
   try {
     let allsalesdetails = await sales.find();
     res.status(201).json(allsalesdetails);
@@ -63,7 +65,42 @@ const getAllSalesDetails = async (req, res) => {
   }
 };
 
+const sendEmail = async (req, res) => {
+  try {
+    const { recipientemail, subject, body, attachment } = req.body;
+    console.log("atachsent ",req.body)
+
+    // Create a Nodemailer transporter
+    let transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user : "anuragmk10@gmail.com",
+        pass : "nuofbwxshkmukqbc" 
+      },
+    });
+
+    // Send email with attachment
+    await transporter.sendMail({
+      from: 'anuragmk10@gmail.com',
+      to: recipientemail,
+      subject: subject,
+      text: body,
+      attachments: [
+        {
+          filename: 'report.pdf', // Replace with your attachment file name
+          content: attachment, // This should be the PDF file content as a base64 string
+        },
+      ],
+    });
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+}
 module.exports = {
   addSale,
   getAllSalesDetails,
+  sendEmail
 };

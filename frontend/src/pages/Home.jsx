@@ -9,7 +9,7 @@ const Home = () => {
   const navigate = useNavigate()
   return (
     <div className="bg-[#030b6b] min-h-[100vh]  ">
-    <div className="flex w-full justify-around h-24 items-center ">
+    <div className="flex w-full  h-24 justify-around items-center ">
       <div>
         <RiProductHuntLine color="white" size={40}/>
       </div>
@@ -28,20 +28,18 @@ const Home = () => {
 }
       </div>
     </div>
-    <div className="flex w-full justify-around items-center   mt-16">
-      <div className="flex  flex-col">
-        <h2 className="text-white text-2xl font-medium">INVENTORY MANAGEMENT</h2>
-        <p className="text-white max-w-md overflow-hidden overflow-ellipsis line-clamp-3">
+    <div className="grid grid-cols-1 md:grid-cols-2    mt-16">
+    <div className="flex justify-center items-center flex-col ">
+  <div className="p-5">
+      <h2 className="text-white my-3 text-2xl tracking-widest font-bold">INVENTORY MANAGEMENT</h2>
+        <p className="text-white my-3 max-w-md overflow-hidden overflow-ellipsis line-clamp-3">
           Inventory system to control and manage products in the warehouse in real-time and integrated to make it easier to develop your business.
         </p>
-        <button className="text-start text-white my-4 text-xl hover:scale-95 hover:text-gray-400">Free trial one month</button>
-        <div className="flex font-medium gap-x-10 text-white">
-            <NumberText  num="14K" text="Brand Owners" />
-            <NumberText num="23K" text="Active Users" />
-            <NumberText num="500+" text="Partners" />
-          </div>
-      </div>
-      <div className="">
+        <button className="text-start border rounded px-2 py-1 text-white my-4 text-xl hover:scale-95 transition duration-300 hover:text-gray-400">Free trial one month</button>
+
+  </div>
+</div>
+      <div className="w-auto h-auto p-5">
         <img src={heroImg} alt="" />
       </div>
     </div>
