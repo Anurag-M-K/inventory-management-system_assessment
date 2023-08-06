@@ -96,7 +96,7 @@ const Sidebar = ({ children, onAddProductClick }) => {
             <span onClick={() => navigate("/salesreports")} className="sm:hidden flex ms-3 mt-3" >
 
             </span>
-            <span onClick={() => navigate("/salesreports")}` className="sm:hidden flex ms-3 mt-3">
+            <span onClick={() => navigate("/salesreports")} className="sm:hidden flex ms-3 mt-3">
 
             <TbReport   color="white"/>
             </span>
