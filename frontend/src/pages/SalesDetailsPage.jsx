@@ -199,7 +199,7 @@ function SalesDetailsPage() {
 
         <div className="md:flex hidden items-baseline">
           <button
-            className="bg-orange-400  hover:scale-90 transition duration-300 p-1 text-white rounded mt-5 mx-5 px-2"
+            className="bg-orange-400  hover:scale-90 transition duration-300 p-1 text-white rounded mt-5  px-2"
             onClick={handleOpenModal}
           >
             Add Sale

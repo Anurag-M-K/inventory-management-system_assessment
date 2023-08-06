@@ -17,10 +17,12 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
     quantity: Yup.number().required('Quantity must be 50 or less'),
     price: Yup.number().required(),
     description: Yup.string().max(200, 'Description must be 200 or less'),
-  });
+  });  const { bluring } = useSelector(state => state.blur)
+
 
   const { userDetails  } = useSelector(state=>state.user) 
 
+  console.log("setismodal ",isModalOpen  )
  
   const handleSubmit = async (values) => {
     try {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SignupForm from './pages/Signup';
 import LoginForm from './pages/LoginForm';
@@ -24,6 +24,7 @@ function routes() {
   const { bluring } = useSelector(state => state.blur)
 
   const handleAddProductClick = () => {
+    console.log("here")
     setIsModalOpen(true);
     dispatch(setBlur(true))
   };
@@ -31,7 +32,10 @@ function routes() {
   const closeModal = () => {
     dispatch(setBlur(false))
     setIsModalOpen(false);
+  
   };
+
+  console.log("from routes ",isModalOpen)
 
   return (
     <BrowserRouter>

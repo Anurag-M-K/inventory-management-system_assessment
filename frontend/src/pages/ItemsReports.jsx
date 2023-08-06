@@ -183,7 +183,6 @@ function ItemsReports() {
     </button>
   )}
 
-
         <input className='border-2 border-black rounded' onChange={handleFilter} type='text' />
       </div>
       <div className='table-container overflow-x-auto'>

@@ -3,21 +3,22 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import controlImage from "../assets/control.png";
 import logoImage from "../assets/logo.png";
-import { FaUser, FaCalendar, FaSearch, FaTachometerAlt } from "react-icons/fa";
+import { FaUser, FaCalendar, FaTachometerAlt } from "react-icons/fa";
 import { MdOutlineInventory } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
-
+import { TbReport } from "react-icons/tb";
+import { AiOutlineShopping } from "react-icons/ai";
 
 const Sidebar = ({ children, onAddProductClick }) => {
   const [open, setOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("Dashboard");
-  const [reportsTabsOpen , setReportsTabsOpen] = useState(false)
+  const [reportsTabsOpen, setReportsTabsOpen] = useState(false);
+
   const Menus = [
     { title: "Dashboard", icon: <FaTachometerAlt size={20} /> },
     { title: "Add Products", icon: <MdOutlineInventory size={20} /> },
     { title: "Customers", icon: <FaUser size={20} />, gap: true },
     { title: "Sales", icon: <FaCalendar size={20} /> },
-    { title: "Items", icon: <FaSearch size={20} /> },
     { title: "Reports", icon: <TbReportSearch size={20} /> },
   ];
 
@@ -34,13 +35,11 @@ const Sidebar = ({ children, onAddProductClick }) => {
       navigate("/customers");
     } else if (title === "Dashboard") {
       navigate("/dashboard");
-    } else if (title === "Items") {
-      navigate("/itemspage");
     } else if (title === "Reports") {
-      if(reportsTabsOpen===true){
-        setReportsTabsOpen(false)
-      }else{
-        setReportsTabsOpen(true)
+      if (reportsTabsOpen === true) {
+        setReportsTabsOpen(false);
+      } else {
+        setReportsTabsOpen(true);
       }
     } else {
       console.log("Navigating to Sales page...");
@@ -92,9 +91,35 @@ const Sidebar = ({ children, onAddProductClick }) => {
               </span>
             </li>
           ))}
-          {
-            reportsTabsOpen ? <><li onClick={()=>navigate('/salesreports')} className=" cursor-pointer text-white ms-10 mt-5 text-sm border-2 rounded p-1 ">Sales Reports</li><li className= "cursor-pointer text-white ms-10 mt-5 text-sm border-2 rounded p-1">Items Reports</li></> : ""
-          }
+          {reportsTabsOpen ? (
+            <>
+            <span onClick={() => navigate("/salesreports")} className="sm:hidden flex ms-3 mt-3" >
+
+            </span>
+            <span onClick={() => navigate("/salesreports")}` className="sm:hidden flex ms-3 mt-3">
+
+            <TbReport   color="white"/>
+            </span>
+            <span className="sm:hidden flex ms-3 mt-3"  onClick={() => navigate("/salesreports")}>
+
+            <AiOutlineShopping   onClick={() => navigate("/itemspage")}color="white"/>
+            </span>
+              <li
+                onClick={() => navigate("/salesreports")}
+                className="text-gray-300 cursor-pointer hidden sm:flex border-gray-300 ms-10 mt-5 text-sm border-2 rounded p-1 "
+              >
+                Sales Reports
+              </li>
+              <li
+                onClick={() => navigate("/itemspage")}
+                className="cursor-pointer text-gray-300 hidden sm:flex border-gray-300  ms-10 mt-5 text-sm border-2 rounded p-1"
+              >
+                Items Reports
+              </li>
+            </>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
       {children}
