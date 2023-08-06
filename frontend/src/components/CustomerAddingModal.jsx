@@ -26,8 +26,8 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
     try {
       setLoading(true);
 
-      const apiUrl = "http://localhost:8000/api/customer/addcustomer";
-      const apiUrl2 = "http://localhost:8000/api/customer/getallcustomers";
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/addcustomer`;
+      const apiUrl2 = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/getallcustomers`;
       const userToken = userDetails.token;
 
       const config = {
@@ -72,7 +72,7 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
           id="authentication-modal"
           tabIndex="-1"
           aria-hidden="true"
-          className="fixed z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] flex justify-center items-center max-h-full"
+          className="fixed z-10 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] flex justify-center items-center max-h-full"
         >
           <div className="relative w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">

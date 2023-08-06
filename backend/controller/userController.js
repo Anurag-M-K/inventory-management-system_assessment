@@ -110,7 +110,6 @@ const login = async (req, res) => {
       
     try {
       const user = res.locals;
-      console.log("user ",user)
       res.send("get user data")
     } catch (error) {
       console.log(error);

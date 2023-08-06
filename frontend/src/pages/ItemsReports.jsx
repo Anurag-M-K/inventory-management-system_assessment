@@ -9,8 +9,12 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from 'sweetalert2';
 import { useReactToPrint } from "react-to-print";
 import {CSVLink} from 'react-csv';
+import Dropdown from "react-dropdown-select";
+
 
 function ItemsReports() {
+  const [selectedOption, setSelectedOption] = useState("");
+
   const { userDetails } = useSelector((state) => state.user);
   const { inventoryDetails } = useSelector((state) => state.inventory);
 
@@ -38,7 +42,7 @@ function ItemsReports() {
   useEffect(() => {
       (async () => {
         const inventory = await axios.get(
-          'http://localhost:8000/api/inventoryitem/getallinventory',
+          `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
           config
         );
         dispatch(setInventoryDetails(inventory.data.inventoryItems));
@@ -68,11 +72,11 @@ function ItemsReports() {
 
       if (result.isConfirmed) {
         const response = await axios.delete(
-          `http://localhost:8000/api/inventoryitem/deleteinventory/${row._id}`,
+          `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/deleteinventory/${row._id}`,
           config
         );
         const inventory = await axios.get(
-          'http://localhost:8000/api/inventoryitem/getallinventory',
+          `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
           config
         );
         dispatch(setInventoryDetails(inventory.data.inventoryItems));
@@ -123,18 +127,66 @@ function ItemsReports() {
     onAfterPrint:()=>alert("Report saved in PDF")
   });
 
+  const dropdownOptions = [
+    { label: "PDF", value: "pdf" },
+    { label: "Excel", value: "excel" },
+    { label: "Print", value: "print" },
+  ];
+
+  const handleDropdownChange = (selectedItems) => {
+    setSelectedOption(selectedItems[0].value);
+  };
+  
   return (
     <div className='mt-5 m-3'>
       <h2 className='text-center mb-10 text-2xl font-medium'>ITEMS DETAILS </h2>
       <div className='text-end m-5'>
-      <button className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 ' onClick={generatePDF}>PDF</button>
+<div className='md:hidden my-3'>
+
+  <Dropdown
+    options={dropdownOptions}
+    values={[selectedOption]}
+    onChange={handleDropdownChange}
+    placeholder="Select an option"
+    />
+    </div>
+    <div className='hidden md:flex'>
+    <button className='bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 ' onClick={generatePDF}>PDF</button>
       <CSVLink filename='Sales Report' data={inventoryDetails} className='hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white '>Export data in Excel</CSVLink>
 
       <button className='bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white' onClick={handlePrint}>Print</button>
 
+    </div>
+  {selectedOption === "pdf" && (
+    <button
+      className="bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2"
+      onClick={generatePDF}
+    >
+      PDF
+    </button>
+  )}
+  {selectedOption === "excel" && (
+    <CSVLink
+      filename="Sales Report"
+      data={inventoryDetails}
+      className="hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white"
+    >
+      Export data in Excel
+    </CSVLink>
+  )}
+  {selectedOption === "print" && (
+    <button
+      className="bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white"
+      onClick={handlePrint}
+    >
+      Print
+    </button>
+  )}
+
+
         <input className='border-2 border-black rounded' onChange={handleFilter} type='text' />
       </div>
-      <div className=''>
+      <div className='table-container overflow-x-auto'>
 
       <DataTable  id="table-to-xls" // Set an id for the table
   className='table' pagination   persistTableHead // Add this property to persist the table head and include it in the export

@@ -3,19 +3,36 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../redux/features/userSlice";
+import { Toaster, toast } from "react-hot-toast";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading ] = useState(false)
   const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      // Reset any previous error messages
+      setEmailError("");
+      setPasswordError("");
+  
+      // Perform validation
+      if (!email.trim()) {
+        setEmailError("Email is required");
+        return;
+      }
+  
+      if (!password.trim()) {
+        setPasswordError("Password is required");
+        return;
+      }
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:8000/api/login", {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/login`, {
         email,
         password,
       });
@@ -25,10 +42,12 @@ function LoginForm() {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
+      toast.success("Login successfully")
       // Redirect to the desired page
       navigate("/");
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message)
     }
   };
 
@@ -63,6 +82,8 @@ function LoginForm() {
                     >
                       Email Address
                     </label>
+                    {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
+
                   </div>
                   <div className="relative">
                     <input
@@ -81,6 +102,9 @@ function LoginForm() {
                     >
                       Password
                     </label>
+                    {passwordError && (
+            <p className="text-red-500 text-sm">{passwordError}</p>
+          )}
                   </div>
                   <div className="relative flex justify-between items-center">
                     <button
@@ -101,6 +125,7 @@ function LoginForm() {
             </div>
           </div>
         </div>
+        <Toaster/>  
       </div>
     </>
   );

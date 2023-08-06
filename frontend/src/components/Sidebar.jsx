@@ -3,20 +3,18 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import controlImage from "../assets/control.png";
 import logoImage from "../assets/logo.png";
-import Chart_fill from "../assets/Chart_fill.png";
-import Chat from "../assets/Chat.png";
-import User from "../assets/User.png";
-import Calendar from "../assets/Calendar.png";
+import { FaUser, FaCalendar, FaSearch, FaTachometerAlt } from "react-icons/fa";
+import { MdOutlineInventory } from "react-icons/md";
 
 const Sidebar = ({ children, onAddProductClick }) => {
   const [open, setOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState("Dashboard"); // State variable to track active tab
+  const [activeTab, setActiveTab] = useState("Dashboard");
   const Menus = [
-    { title: "Dashboard", src:"/src/assets/Chart_fill.png" },
-    { title: "Add Products",  src:"/src/assets/Chat.png" },
-    { title: "Costumers", src:"/src/assets/User.png", gap: true },
-    { title: "Sales", src:"/src/assets/Calendar.png" },
-    { title: "Items", src:"/src/assets/Search.png" },
+    { title: "Dashboard", icon: <FaTachometerAlt size={20} /> },
+    { title: "Add Products", icon: <MdOutlineInventory size={20} /> },
+    { title: "Costumers", icon: <FaUser size={20} />, gap: true },
+    { title: "Sales", icon: <FaCalendar size={20} /> },
+    { title: "Items", icon: <FaSearch size={20} /> },
   ];
 
   const { bluring } = useSelector((state) => state.blur);
@@ -32,22 +30,20 @@ const Sidebar = ({ children, onAddProductClick }) => {
       navigate("/customers");
     } else if (title === "Dashboard") {
       navigate("/dashboard");
-    }else if(title === "Items"){
-      navigate("/itemspage")
-    }
-     else {
+    } else if (title === "Items") {
+      navigate("/itemspage");
+    } else {
       console.log("Navigating to Sales page...");
       navigate("/sales");
     }
   };
-  
 
   return (
     <div className={`flex   h-screen ${bluring ? "blur-sm" : "blur-none"}`}>
       <div
         className={`  ${
           open ? "w-72" : "w-20 "
-        } bg-dark-purple   h-[120%] p-5  pt-8 relative duration-300`}
+        } bg-dark-purple   h-[200%] md:h-[140%] p-5   pt-8 relative duration-300`}
       >
         <img
           src={controlImage}
@@ -67,7 +63,7 @@ const Sidebar = ({ children, onAddProductClick }) => {
               !open && "scale-0"
             }`}
           >
-            Designer
+            Inventory
           </h1>
         </div>
         <ul className="pt-6">
@@ -75,16 +71,13 @@ const Sidebar = ({ children, onAddProductClick }) => {
             <li
               key={index}
               className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 
-              ${Menu.gap ? "mt-9" : "mt-2"
-              } ${index === 0 && ""} ${
+              ${Menu.gap ? "mt-9" : "mt-2"} ${index === 0 && ""} ${
                 activeTab === Menu.title ? "bg-light-white" : "" // Add this condition to apply the background for the active tab
               }`}
               onClick={() => handleMenuClick(Menu.title)}
             >
-              <img src={Menu.src} />
-              <span
-                className={`${!open && "hidden"} origin-left duration-200`}
-              >
+              {Menu.icon}
+              <span className={`${!open && "hidden"} origin-left duration-200`}>
                 {Menu.title}
               </span>
             </li>

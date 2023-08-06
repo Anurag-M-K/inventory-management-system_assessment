@@ -1,14 +1,14 @@
-import React from 'react'
-import ProductSummary from '../components/ProductSummary'
-import InventoryTable from '../components/InventoryTable'
+import React from "react";
+import ProductSummary from "../components/ProductSummary";
+import InventoryTable from "../components/InventoryTable";
 
 function Dashboard() {
   return (
     <>
-    <ProductSummary />
-    <InventoryTable/>
+      <ProductSummary />
+      <InventoryTable />
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

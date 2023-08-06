@@ -31,7 +31,7 @@ function SalesAddingModal({ isOpen, onClose }) {
     try {
       setLoading(true);
 
-      const apiUrl = "http://localhost:8000/api/sales/addsale";
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/sales/addsale`;
       const userToken = userDetails.token;
 
       const config = {
@@ -42,7 +42,6 @@ function SalesAddingModal({ isOpen, onClose }) {
 
       const response = await axios.post(apiUrl, values, config);
       setLoading(false);
-      console.log("response ",response)
 
       if (response.status === 201) {
         // Show a success toast if the form submission is successful
@@ -64,7 +63,7 @@ function SalesAddingModal({ isOpen, onClose }) {
 
   const fetchSales = async () => {
     try {
-      const apiUrl = 'http://localhost:8000/api/sales/getallsalesdetails';
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/sales/getallsalesdetails`;
       const userToken = userDetails.token;
 
       const config = {
@@ -96,7 +95,7 @@ function SalesAddingModal({ isOpen, onClose }) {
           <div className="relative w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <button
-                onClick={() => setIsCustomerModalOpen(false)}
+                onClick={() => onClose()}
                 type="button"
                 className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="authentication-modal"

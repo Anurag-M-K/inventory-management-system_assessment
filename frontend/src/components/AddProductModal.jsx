@@ -28,7 +28,7 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
       setLoading(true); // Set loading state to true while the form is being submitted
 
       // Your API endpoint to submit the form data
-      const apiUrl = 'http://localhost:8000/api/inventoryitem/addproduct';
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/addproduct`;
       const userToken = userDetails.token;
 
       // Set the Authorization header with the token
@@ -42,7 +42,7 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
       // Make a POST request to the server to submit the form data
       const response = await axios.post(apiUrl, values,config );
       const inventory = await axios.get(
-        'http://localhost:8000/api/inventoryitem/getallinventory',
+        `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
         config
       );
       dispatch(setInventoryDetails(inventory.data.inventoryItems));

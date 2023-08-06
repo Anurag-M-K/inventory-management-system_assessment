@@ -16,7 +16,7 @@ function CustomerLedger() {
 
   const fetchCustomerLedger = async () => {
     try {
-      const apiUrl = `http://localhost:8000/api/customer/customerledger/${id}`;
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/customerledger/${id}`;
       const userToken = userDetails.token;
 
       const config = {
@@ -90,7 +90,7 @@ function CustomerLedger() {
   return (
     <div>
       <div>
-      <h1 className="text-center font-bold mt-5">CUSTOMER LEDGER DETAILS</h1>
+      <h1 className="text-center text-2xl font-bold mt-5">CUSTOMER LEDGER DETAILS</h1>
         <div className="m-5">
           <h1 className="m-2">Customer name : <span className="font-medium ">{customerLedger?.customer?.name}</span></h1>
           <h1 className="m-2">Mobile : <span className="font-medium ">{customerLedger?.customer?.mobile}</span></h1>

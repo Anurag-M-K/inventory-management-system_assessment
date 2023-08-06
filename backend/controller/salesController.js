@@ -2,6 +2,8 @@ const sales = require("../model/salesSchema");
 const inventory = require("../model/inventoryItemsSchema");
 const customer = require("../model/costumerSchema");
 const nodemailer = require('nodemailer');
+const multer = require('multer');
+
 
 const addSale = async (req, res) => {
   try {
@@ -55,8 +57,7 @@ const addSale = async (req, res) => {
 };
 
 const getAllSalesDetails = async (req, res) => {
-  console.log("sales backend")
-  try {
+    try {
     let allsalesdetails = await sales.find();
     res.status(201).json(allsalesdetails);
   } catch (error) {
@@ -65,30 +66,41 @@ const getAllSalesDetails = async (req, res) => {
   }
 };
 
+
+
+const storage = multer.memoryStorage(); // Using memory storage to handle files in memory
+
 const sendEmail = async (req, res) => {
   try {
-    const { recipientemail, subject, body, attachment } = req.body;
-    console.log("atachsent ",req.body)
+    const { email, subject, body } = req.body;
+    const { originalname, buffer } = req.file;
+    console.log(req.body)
+
+    // Access the file details from req.file
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file provided' });
+    }
+
 
     // Create a Nodemailer transporter
     let transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        user : "anuragmk10@gmail.com",
-        pass : "nuofbwxshkmukqbc" 
+        user: process.env.USER,
+        pass: process.env.PASS, 
       },
     });
 
     // Send email with attachment
     await transporter.sendMail({
-      from: 'anuragmk10@gmail.com',
-      to: recipientemail,
+      from: process.env.USER,
+      to: email,
       subject: subject,
       text: body,
       attachments: [
         {
-          filename: 'report.pdf', // Replace with your attachment file name
-          content: attachment, // This should be the PDF file content as a base64 string
+          filename: originalname,
+          content: buffer, // Use the file buffer from req.file
         },
       ],
     });
@@ -98,7 +110,7 @@ const sendEmail = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Failed to send email' });
   }
-}
+};
 module.exports = {
   addSale,
   getAllSalesDetails,

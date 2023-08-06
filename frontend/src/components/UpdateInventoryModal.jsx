@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { setInventoryDetails } from '../redux/features/inventorySlice';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setInventoryDetails } from "../redux/features/inventorySlice";
+import { Toaster, toast } from "react-hot-toast";
 
 function UpdateInventoryModal({ row, closeModal }) {
-    const { userDetails } = useSelector((state) => state.user);
+  const { userDetails } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
   const [updatedData, setUpdatedData] = useState({
     productname: row.productname,
     quantity: row.quantity,
@@ -23,8 +25,8 @@ function UpdateInventoryModal({ row, closeModal }) {
   };
   const userToken = userDetails.token;
   const handleSubmit = async (e) => {
-console.log("rowm ",row)
     e.preventDefault();
+    setLoading(true);
     try {
       const config = {
         headers: {
@@ -33,80 +35,101 @@ console.log("rowm ",row)
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/inventoryitem/updateinventory/${row._id}`,
+        `${
+          import.meta.env.VITE_APP_BACKEND_URL
+        }/inventoryitem/updateinventory/${row._id}`,
         updatedData,
         config
       );
       const inventory = await axios.get(
-        'http://localhost:8000/api/inventoryitem/getallinventory',
+        `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
         config
       );
 
-
+      toast.success("Product updated");
       // Update the inventory details in Redux state
       dispatch(setInventoryDetails(inventory.data.inventoryItems));
 
       // Close the modal after successful update
       closeModal();
     } catch (error) {
-      console.log('Error updating:', error);
+      console.log("Error updating:", error);
+      toast.error("Something went wrong");
     }
+    setLoading(false);
   };
 
   return (
-    <div className='fixed inset-0 flex justify-center items-center z-10 bg-black bg-opacity-50'>
-      <div className='bg-white p-8 rounded-lg'>
-        <h2 className='text-xl font-bold mb-4'>Update Inventory</h2>
+    <div className="fixed inset-0 flex justify-center items-center z-10 bg-black bg-opacity-50">
+      <div className="bg-white p-8 rounded-lg">
+        <h2 className="text-xl font-bold mb-4">Update Inventory</h2>
         <form onSubmit={handleSubmit}>
-          <div className='mb-4'>
-            <label htmlFor='productname'>Product Name</label>
+          <div className="mb-4">
+            <label htmlFor="productname">Product Name</label>
             <input
-              type='text'
-              name='productname'
+              type="text"
+              name="productname"
               value={updatedData.productname}
               onChange={handleChange}
-              className='border border-gray-400 rounded px-2 py-1 w-full'
+              className="border border-gray-400 rounded px-2 py-1 w-full"
             />
           </div>
-          <div className='mb-4'>
-            <label htmlFor='quantity'>Quantity</label>
+          <div className="mb-4">
+            <label htmlFor="quantity">Quantity</label>
             <input
-              type='number'
-              name='quantity'
+              type="number"
+              name="quantity"
               value={updatedData.quantity}
               onChange={handleChange}
-              className='border border-gray-400 rounded px-2 py-1 w-full'
+              className="border border-gray-400 rounded px-2 py-1 w-full"
             />
           </div>
-          <div className='mb-4'>
-            <label htmlFor='price'>Price</label>
+          <div className="mb-4">
+            <label htmlFor="price">Price</label>
             <input
-              type='number'
-              name='price'
+              type="number"
+              name="price"
               value={updatedData.price}
               onChange={handleChange}
-              className='border border-gray-400 rounded px-2 py-1 w-full'
+              className="border border-gray-400 rounded px-2 py-1 w-full"
             />
           </div>
-          <div className='mb-4'>
-            <label htmlFor='description'>Description</label>
+          <div className="mb-4">
+            <label htmlFor="description">Description</label>
             <textarea
-              name='description'
+              name="description"
               value={updatedData.description}
               onChange={handleChange}
-              className='border border-gray-400 rounded px-2 py-1 w-full'
+              className="border border-gray-400 rounded px-2 py-1 w-full"
             />
           </div>
-          <div className='flex justify-end'>
-            <button type='submit' className='bg-blue-500 text-white px-4 py-2 rounded'>
-              Save
-            </button>
-            <button type='button' className='ml-2 bg-red-500 text-white px-4 py-2 rounded' onClick={closeModal}>
+          <div className="flex justify-end">
+            {loading ? (
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Saving...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Save
+              </button>
+            )}
+            <button
+              type="button"
+              className="ml-2 bg-red-500 text-white px-4 py-2 rounded"
+              onClick={closeModal}
+            >
               Cancel
             </button>
           </div>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 }

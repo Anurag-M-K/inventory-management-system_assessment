@@ -43,7 +43,7 @@ function routes() {
             {/* <Route exact  path="/dashboard" element={<PrivateRoutes> <Dashboard /></PrivateRoutes>} /> */}
             <Route path="/dashboard" element={
            <PrivateRoutes>
-           <Sidebar  onAddProductClick={handleAddProductClick}>
+           <Sidebar onAddProductClick={handleAddProductClick}>
               <Layout>
                 <Dashboard />
               </Layout>

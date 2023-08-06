@@ -1,38 +1,69 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-
 function EmailExportModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
+
   const validate = Yup.object({
     subject: Yup.string()
-      .max(100, "subject must be 100 characters or less")
-      .required("Customer name is required"),
-      recipientemail: Yup.string().email("Invalid email format").required("Email is required"),
+      .max(100, "Subject must be 100 characters or less")
+      .required("Subject is required"),
+    recipientemail: Yup.string()
+      .email("Invalid email format")
+      .required("Recipient email is required"),
     body: Yup.string().required("Body is required"),
+    file: Yup.mixed().required("File attachment is required"),
   });
 
-  const handleSubmit = async (values) => {
-    console.log(values)
+  const [recipientemail, setRecipientEmail] = useState('');
+  const [file, setFile] = useState(null);
+const [body , setBody] = useState("")
+const [subject , setSubject ] = useState("")
+
+  const handleEmailChange = (e) => {
+    setRecipientEmail(e.target.value);
+  };
+  const handleBodyChange = (e)=>{
+    setBody(e.target.value)
+  }
+  const handleSubjectChange = (e)=>{
+    setSubject(e.target.value)
+  }
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+console.log("dfdf",recipientemail)
+    const formData = new FormData();
+    formData.append('email', recipientemail);
+    formData.append('file', file);
+    formData.append('body', body);
+    formData.append('text', subject);
+
+    console.log("form data ",formData)
     setLoading(true);
     try {
-      // Send the email using an API request
-      const response = await axios.post("http://localhost:8000/api/sales/sendemail", values);
-      if (response.status === 200) {
-        toast.success("Email sent successfully");
-        onClose();
-      } else {
-        toast.error("Failed to send email");
-      }
+      await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/sales/sendemail`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      onClose()
+      toast.success('Email sent successfully');
     } catch (error) {
-      console.error("Error sending email:", error);
-      toast.error("An error occurred while sending the email");
+      console.error('Error sending email:', error);
+      toast.error('Failed to send email');
     }
     setLoading(false);
-  };  
+  };
+
+ 
+
   return (
     <>
       {isOpen ? (
@@ -69,21 +100,11 @@ function EmailExportModal({ isOpen, onClose }) {
               </button>
               <div className="px-6 py-6 lg:px-8">
                 <h3 className="mb-4  text-center   text-xl font-medium text-gray-900 dark:text-white">
-                  Send Emai
+                  Send Email
                 </h3>
 
-                <Formik
-                  initialValues={{
-                    subject: "",
-                    recipientemail: "",
-                    body: "",
-                    data: "",
-                    
-                  }}
-                  validationSchema={validate}
-                  onSubmit={handleSubmit}
-                >
-                  <Form className="space-y-6 pb-5" action="#">
+           
+                  <form onSubmit={handleSubmit} className="space-y-6 pb-5" action="#">
                     <div>
                
                   
@@ -96,18 +117,15 @@ function EmailExportModal({ isOpen, onClose }) {
                       >
                         Subject
                       </label>
-                      <Field
-                        type="subject"
+                      <input
+                      onChange={handleSubjectChange}
+                        type="text"
                         id="subject"
                         name="subject"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         placeholder="subject"
                       />
-                      <ErrorMessage
-                        name="subject"
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
+                      
                     </div>
                     <div>
                       <label
@@ -116,18 +134,15 @@ function EmailExportModal({ isOpen, onClose }) {
                       >
                         Reccipient Email
                       </label>
-                      <Field
+                      <input
+                      onChange={handleEmailChange}
                         type="email"
                         id="recipientemail"
                         name="recipientemail"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         placeholder="recipientemail"
                       />
-                      <ErrorMessage
-                        name="recipientemail"
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
+                    
                     </div>
                     <div>
                       <label
@@ -136,18 +151,15 @@ function EmailExportModal({ isOpen, onClose }) {
                       >
                         Body
                       </label>
-                      <Field
+                      <input
+                      onChange={handleBodyChange}
                         type="text"
                         id="body"
                         name="body"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         placeholder="body"
                       />
-                      <ErrorMessage
-                        name="body"
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
+                 
                     </div>
                     <div>
                       <label
@@ -156,28 +168,31 @@ function EmailExportModal({ isOpen, onClose }) {
                       >
                         File
                       </label>
-                      <Field
+                      <input
+                      onChange={handleFileChange}
                         type="file"
                         id="file"
                         name="file"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         placeholder="file"
                       />
-                      <ErrorMessage
-                        name="file"
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
+                     
                     </div>
+{
+  loading ?  <button
+  type="submit"
+  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+>
+  Sending...
+</button> :
 
                     <button
                       type="submit"
                       className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      Save
-                    </button>
-                  </Form>
-                </Formik>
+                      Send
+                    </button>}
+                  </form>
               </div>
             </div>
           </div>
