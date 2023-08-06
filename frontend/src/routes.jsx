@@ -15,6 +15,7 @@ import SalesDetailsPage from './pages/SalesDetailsPage';
 import CustomerLedger from './pages/CustomerLedger';
 import ItemsReports from './pages/ItemsReports';
 import EmailExport from './components/EmailExport';
+import SalesReports from './pages/SalesReports';
 
 
 function routes() {
@@ -87,6 +88,16 @@ function routes() {
            <Sidebar  onAddProductClick={handleAddProductClick}>
               <Layout>
                 <ItemsReports />
+              </Layout>
+            </Sidebar>
+            </PrivateRoutes>
+          }
+        />
+            <Route path="/salesreports" element={
+           <PrivateRoutes>
+           <Sidebar  onAddProductClick={handleAddProductClick}>
+              <Layout>
+                <SalesReports />
               </Layout>
             </Sidebar>
             </PrivateRoutes>

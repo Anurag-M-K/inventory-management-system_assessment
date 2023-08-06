@@ -8,9 +8,9 @@ import { Toaster, toast } from "react-hot-toast";
 import { useReactToPrint } from "react-to-print";
 import { CSVLink } from "react-csv";
 import Dropdown from "react-dropdown-select";
-import EmailExportModal from "../components/EmailExportModal";
+import EmailExportModal from '../components/EmailExportModal'
 
-function SalesDetailsPage() {
+function SalesReports() {
   const { userDetails } = useSelector((state) => state.user);
   const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -19,9 +19,11 @@ function SalesDetailsPage() {
   const dispatch = useDispatch();
   const componentRef = useRef();
   const { salesData } = useSelector((state) => state.sales);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [ selectedOption , setSelectedOption ] = useState('')
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+
+
 
   //printing function of sales report
   const handlePrint = useReactToPrint({
@@ -49,9 +51,7 @@ function SalesDetailsPage() {
 
   const fetchSales = async () => {
     try {
-      const apiUrl = `${
-        import.meta.env.VITE_APP_BACKEND_URL
-      }/sales/getallsalesdetails`;
+      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/sales/getallsalesdetails`;
       const userToken = userDetails?.token;
 
       const config = {
@@ -125,11 +125,10 @@ function SalesDetailsPage() {
     { label: "Print", value: "print" },
     { label: "Add Sale", value: "addSale" },
     { label: "Send Email", value: "sendEmail" },
-  ];
-  const handleDropdownChange = (selectedItems) => {
+  ];const handleDropdownChange = (selectedItems) => {
     const selectedValue = selectedItems[0].value;
     setSelectedOption(selectedValue);
-
+  
     switch (selectedValue) {
       case "pdf":
         generatePDF();
@@ -150,6 +149,7 @@ function SalesDetailsPage() {
         break;
     }
   };
+  
 
   const handleDateFilter = () => {
     // Filter by date range
@@ -162,49 +162,107 @@ function SalesDetailsPage() {
     setfilteredSales(newData);
   };
 
+
   return (
     <div>
-      <h1 className="text-center mx-5 font-medium text-2xl mt-4">
-        SALES DETAILS
-      </h1>
-      <SalesAddingModal isOpen={isSalesModalOpen} onClose={handleCloseModal} />
-
+      <h1 className="text-center mx-5 font-medium text-2xl mt-4">SALES DETAILS</h1>
+     
       <div className="text-end m-5  ">
-        <div className="text-end m-5 md:hidden">
-          <Dropdown
-            options={dropdownOptions}
-            values={[selectedOption]}
-            onChange={handleDropdownChange}
-            placeholder="Select an option"
-            color="gray"
-          />
-          {selectedOption === "excel" && (
-            <CSVLink
-              filename="Sales Report"
-              data={filteredSales.length > 0 ? filteredSales : sales}
-              className="hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white"
-            >
-              Export data in Excel
-            </CSVLink>
-          )}
-          {selectedOption === "print" && (
-            <button
-              className="bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white"
-              onClick={handlePrint}
-            >
-              Print
-            </button>
-          )}
-        </div>
 
-        <div className="md:flex hidden items-baseline">
-          <button
-            className="bg-orange-400  hover:scale-90 transition duration-300 p-1 text-white rounded mt-5 mx-5 px-2"
-            onClick={handleOpenModal}
-          >
-            Add Sale
-          </button>
-        </div>
+      <div className="text-end m-5 md:hidden">
+  <Dropdown
+    options={dropdownOptions}
+    values={[selectedOption]}
+    onChange={handleDropdownChange}
+    placeholder="Select an option"
+    color="gray"
+  />
+  {selectedOption === "excel" && (
+    <CSVLink
+      filename="Sales Report"
+      data={filteredSales.length > 0 ? filteredSales : sales}
+      className="hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white"
+    >
+      Export data in Excel
+    </CSVLink>
+  )}
+  {selectedOption === "print" && (
+    <button
+      className="bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white"
+      onClick={handlePrint}
+    >
+      Print
+    </button>
+  )}
+
+</div>
+
+<div className="md:flex hidden items-baseline">
+
+    
+
+
+     
+ 
+  
+
+      
+      </div>
+
+      <div className="flex flex-wrap justify-end gap-5 m-5">
+      <button
+          className="bg-gray-500 px-2 rounded py-1 hover:scale-90 transition duration-300 mx-2 n text-white"
+          onClick={handlePrint}
+        >
+        Print
+      </button>
+      <CSVLink
+          filename="Sales Report"
+          data={filteredSales.length > 0 ? filteredSales : sales}
+          className="hover:scale-90 transition duration-300 bg-green-600 rounded px-2 py-1 text-white "
+        >
+        Export data in Excel
+        </CSVLink>
+        <button
+          className="bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 "
+          onClick={generatePDF}
+        >
+          PDF
+        </button>
+        <EmailExportModal
+          isOpen={isEmailModalOpen}
+          onClose={handleCloseEmailModal}
+        />
+        <button
+          onClick={handleOpenEmailModal}
+          className="bg-red-500 text-white rounded px-2 py-1 hover:scale-90 transition duration-300 mx-2 "
+        >
+          Send Email
+        </button>
+            <input
+              className="border-2 border-black rounded"
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+            <input
+              className="border-2 border-black rounded"
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+            
+            <button
+              className="bg-blue-500 px-2 rounded py-1 hover:scale-90 transition duration-300 text-white"
+              onClick={handleDateFilter}
+            >
+              Filter by Date
+            </button>
+         
+
+
+         
+          </div>
       </div>
       <div className="m-5 w-auto" ref={componentRef}>
         <div ref={componentRef} className="table-container overflow-x-auto">
@@ -227,4 +285,4 @@ function SalesDetailsPage() {
   );
 }
 
-export default SalesDetailsPage;
+export default SalesReports;
