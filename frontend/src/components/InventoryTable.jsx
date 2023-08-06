@@ -39,11 +39,16 @@ function InventoryTable() {
   }, []);
 
   const handleFilter = (event) => {
+    const searchString = event.target.value.toLowerCase();
     const newData = inventoryDetails.filter((row) => {
-      return row.productname.toLowerCase().includes(event.target.value.toLowerCase());
+      return (
+        row.productname.toLowerCase().includes(searchString) ||
+        (row.description && row.description.toLowerCase().includes(searchString))
+      );
     });
     setRecords(newData);
   };
+  
 
   const handleDelete = async (row) => {
     try {
