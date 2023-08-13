@@ -16,7 +16,7 @@ function CustomerLedger() {
 
   const fetchCustomerLedger = async () => {
     try {
-      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/customerledger/${id}`;
+      const apiUrl = `http://localhost:8000/api/customer/customerledger/${id}`;
       const userToken = userDetails.token;
 
       const config = {

@@ -26,8 +26,8 @@ function CustomerAddingModal({ setCustomers, isOpen, onClose }) {
     try {
       setLoading(true);
 
-      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/addcustomer`;
-      const apiUrl2 = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/getallcustomers`;
+      const apiUrl = `http://localhost:8000/api/customer/addcustomer`;
+      const apiUrl2 = `http://localhost:8000/api/customer/getallcustomers`;
       const userToken = userDetails.token;
 
       const config = {

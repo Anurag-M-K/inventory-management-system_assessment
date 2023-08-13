@@ -11,6 +11,7 @@ The Inventory Management System is deployed at:https://astounding-truffle-8eaad3
 2. Install dependencies: `npm install`
 3. Start the server: `npm start`
 4. Start the frontend : `npm run dev`
+5.frontend env : VITE_APP_BACKEND_URL = http://localhost:8000/api 
 
 
 ## Features

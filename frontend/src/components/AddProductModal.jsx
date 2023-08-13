@@ -17,12 +17,12 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
     quantity: Yup.number().required('Quantity must be 50 or less'),
     price: Yup.number().required(),
     description: Yup.string().max(200, 'Description must be 200 or less'),
-  });  const { bluring } = useSelector(state => state.blur)
+  });  
+  const { bluring } = useSelector(state => state.blur)
 
 
   const { userDetails  } = useSelector(state=>state.user) 
 
-  console.log("setismodal ",isModalOpen  )
  
   const handleSubmit = async (values) => {
     try {
@@ -30,7 +30,7 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
       setLoading(true); // Set loading state to true while the form is being submitted
 
       // Your API endpoint to submit the form data
-      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/addproduct`;
+      const apiUrl = `http://localhost:8000/api/inventoryitem/addproduct`;
       const userToken = userDetails.token;
 
       // Set the Authorization header with the token
@@ -44,7 +44,7 @@ function AddProductModal({ setIsModalOpen, isModalOpen }) {
       // Make a POST request to the server to submit the form data
       const response = await axios.post(apiUrl, values,config );
       const inventory = await axios.get(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
+        `http://localhost:8000/api/inventoryitem/getallinventory`,
         config
       );
       dispatch(setInventoryDetails(inventory.data.inventoryItems));

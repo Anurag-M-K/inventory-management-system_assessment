@@ -35,14 +35,12 @@ function UpdateInventoryModal({ row, closeModal }) {
       };
 
       const response = await axios.put(
-        `${
-          import.meta.env.VITE_APP_BACKEND_URL
-        }/inventoryitem/updateinventory/${row._id}`,
+        `http://localhost:8000/api/inventoryitem/updateinventory/${row._id}`,
         updatedData,
         config
       );
       const inventory = await axios.get(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/inventoryitem/getallinventory`,
+        `http://localhost:8000/api/inventoryitem/getallinventory`,
         config
       );
 

@@ -30,7 +30,7 @@ function CustomersManagePage() {
 
   const fetchCustomers = async () => {
     try {
-      const apiUrl = `${import.meta.env.VITE_APP_BACKEND_URL}/customer/getallcustomers`;
+      const apiUrl = `http://localhost:8000/api/customer/getallcustomers`;
       const userToken = userDetails.token;
 
       const config = {

@@ -49,9 +49,7 @@ function SalesDetailsPage() {
 
   const fetchSales = async () => {
     try {
-      const apiUrl = `${
-        import.meta.env.VITE_APP_BACKEND_URL
-      }/sales/getallsalesdetails`;
+      const apiUrl = `http://localhost:8000/api/sales/getallsalesdetails`;
       const userToken = userDetails?.token;
 
       const config = {
