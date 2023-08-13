@@ -86,14 +86,14 @@ const sendEmail = async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        user: process.env.USER,
-        pass: process.env.PASS, 
+        user: "anuragmk10@gmail.com",
+        pass: "nuofbwxshkmukqbc", 
       },
     });
 
     // Send email with attachment
     await transporter.sendMail({
-      from: process.env.USER,
+      from: "anuragmk10@gmail.com",
       to: email,
       subject: subject,
       text: body,
